@@ -11,11 +11,19 @@ make_dictionary: "yes" # yes: make dictionary files, no: do not make dictionary 
 data_path: "/hpc/group/kamaleswaranlab/GradyDataset/EMR_RAW"
 groupings_path: "/cwork/jfr29/Sepy/groupings"
 pickle_output_path: "/cwork/jfr29/Sepy/pickle/"
-dictionary_output_path: "/cwork/jfr29/Sepy/supertables/gr_y/"
+dictionary_output_path: "/hpc/group/kamaleswaranlab/GradyDataset/EMR_Supertables/"
 bed_unit_csv_fname:  "/cwork/jfr29/Sepy/AdditionalInformation/bed_units_to_icu_AH.csv"
 variable_bounds_csv_fname : "/cwork/jfr29/Sepy/AdditionalInformation/Variable_Chart.csv"
 dialysis_info_csn_fname: "/cwork/jfr29/Sepy/AdditionalInformation/PEACH_HD_CRRT.csv"
-unique_encounters_path: "/hpc/group/kamaleswaranlab/GradyDataset/EMR_RAW/2014/encounter_2014_decomp_03112020.dsv"
+unique_encounters_path: 
+  2014: "/hpc/group/kamaleswaranlab/GradyDataset/EMR_RAW/2014/encounter_2014_decomp_03112020.dsv"
+  2015: "/hpc/group/kamaleswaranlab/GradyDataset/EMR_RAW/2015/encounter_2015_decomp_03112020.dsv"
+  2016: "/hpc/group/kamaleswaranlab/GradyDataset/EMR_RAW/2016/encounter_2016_decomp_03112020.dsv"
+  2017: "/hpc/group/kamaleswaranlab/GradyDataset/EMR_RAW/2017/encounter_2017_decomp_03112020.dsv"
+  2018: "/hpc/group/kamaleswaranlab/GradyDataset/EMR_RAW/2018/encounter_2018_decomp_03112020.dsv"
+  2020: "/hpc/group/kamaleswaranlab/GradyDataset/EMR_RAW/2020/encounter_2020_decomp_07222020.dsv"
+  2021: "/hpc/group/kamaleswaranlab/GradyDataset/EMR_RAW/2021/encounter_2021_decomp_05032022.dsv"
+  2022: "/hpc/group/kamaleswaranlab/GradyDataset/EMR_RAW/2022/encounter_2022_decomp_11082022.dsv"
 dataset_identifier: "gr_y"
 years_to_scrape_data: ["2014", "2015", "2016", "2017", "2018", "2020", "2021", "2022"]
 # CSN FILTERING
@@ -57,6 +65,30 @@ dictionary_paths:
     - ["DIAGNOSIS", "diagnoses"]
 # YEARLY INSTANCE FUNCTIONS AND PARAMETERS
 yearly_instance:
+  import_labs:
+    drop_cols:
+      - "study_id"
+      - "har"
+      - "mrn"
+    group_cols:
+      - "physionet"
+      - "import"
+      - "super_table_col_name"
+      - "component_id"
+    date_cols:
+      - "collection_time"
+      - "lab_result_time"
+    index_col: ["csn"]
+    numeric_cols: null
+  import_bed_locations:
+    drop_cols:
+      - "study_id"
+      - "har"
+      - "mrn"
+    index_col: ["csn"]
+    date_cols:
+      - "bed_location_start"
+      - "bed_location_end"
   import_demographics:
     drop_cols: ["study_id"]
     index_col: ["pat_id"]
@@ -151,27 +183,6 @@ yearly_instance:
       - "mrn"
     index_col: ["csn"]
     date_cols: ["dx_time_date"]
-  import_labs:
-    drop_cols: []
-    group_cols:
-      - "physionet"
-      - "import"
-      - "super_table_col_name"
-      - "component_id"
-    date_cols:
-      - "collection_time"
-      - "lab_result_time"
-    index_col: ["csn"]
-    numeric_cols: null
-  import_bed_locations:
-    drop_cols:
-      - "study_id"
-      - "har"
-      - "mrn"
-    index_col: ["csn"]
-    date_cols:
-      - "bed_location_start"
-      - "bed_location_end"
 # COMORBIDITY SUMMARY KEYWORDS
 comorbidity_summary:
   - "ICD10_quan_deyo"

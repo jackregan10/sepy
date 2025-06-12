@@ -10,9 +10,6 @@ Author: Jack F. Regan
 Edited: 2025-03-06
 Version: 0.2
 
-Changes:
-  - improved documentation
-  - implemented yaml configuration file
 """
 
 import time
@@ -392,7 +389,7 @@ class sepyIMPORT:
         df_labs_filtered_numeric["lab_result"] = pd.to_numeric(
             df_labs_filtered_numeric["lab_result"], errors="coerce"
         )
-
+        
         # Tiddy up index using previously defined fcn
         df_labs_numeric = tidy_index(df_labs_filtered_numeric)
         df_labs_string = tidy_index(df_labs_filtered_string)
@@ -402,9 +399,12 @@ class sepyIMPORT:
         )
 
         df_labs_numeric = df_labs_numeric
+        
         df_labs_string = df_labs_string
+
         # Concat the string and numeric dfs
         df_labs_all = pd.concat([df_labs_numeric, df_labs_string], axis=0)
+
         
         # Remove duplicate columns
         df_labs_all = df_labs_all.loc[:, ~df_labs_all.columns.duplicated()]

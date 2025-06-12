@@ -13,10 +13,6 @@ Author: Jack F. Regan
 Edited: 025-03-01
 Vtrsion: 0.2
 
-Changes:
-     - combined import and dictionary construction into a single script.
-     - update documentation.
-     - added configuration file through yaml for extensibility.
 """
 import pickle
 import re
@@ -34,6 +30,7 @@ import numpy as np
 from pathlib import Path
 
 logging.basicConfig(level=logging.INFO)
+
 ###########################################################################
 ############################ File Dictionaries ############################
 ###########################################################################
@@ -298,7 +295,7 @@ if __name__ == "__main__":
         try:
             logging.info(sys.version)
             # set file path for unique encounters
-            unique_encounters_path = yaml_data["unique_encounters_path"]
+            unique_encounters_path = yaml_data["unique_encounters_path"][year]
             logging.info(f"MkDct- The unique encounters path: {unique_encounters_path}")
             # set filter for unique encounters
             encounter_type = yaml_data["encounter_type"]
@@ -337,9 +334,12 @@ if __name__ == "__main__":
         vent_start = 0
         # reads the list of csns
         csn_df = pd.read_csv(unique_encounters_path, sep = "|", header = 0)
+        csn_df.columns = csn_df.columns.str.lower()
         # checks if the specific encounter type filter is applied
         if unique_enc_filter == "yes":
-            csn_df = csn_df[csn_df.csn.isin(unique_enc_filter)]
+            csn_df = csn_df[csn_df.csn.isin(unique_enc)]
+            selected_csns = csn_df['csn'].unique().tolist()
+            logging.info(f"The unique csn's selected are: {selected_csns}")
         else:
             logging.info(f"MkDct- No specific encounter type filter was applied")
             if encounter_type != "all":
@@ -452,7 +452,7 @@ if __name__ == "__main__":
             # write general files
             # Save encounter summary
             UNIQUE_FILE_ID = f"{processor_assignment}_{year}"
-            base_path = output_path + yaml_data["sepsis_summary"] / str(year)
+            base_path = base_sepsis_path
             pd.concat(appended_enc_summaries).to_csv(
                 base_path / "encounter_summary" / f"encounters_summary_{UNIQUE_FILE_ID}.csv",
                 index=True,

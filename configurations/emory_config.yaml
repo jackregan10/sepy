@@ -11,19 +11,33 @@ make_dictionary: "yes" # yes: make dictionary files, no: do not make dictionary 
 data_path: "/hpc/group/kamaleswaranlab/EmoryDataset/EMR_RAW"
 groupings_path: "/cwork/jfr29/Sepy/groupings"
 pickle_output_path: "/cwork/jfr29/Sepy/pickle/"
-dictionary_output_path: "/cwork/jfr29/Sepy/supertables/em_y/"
+dictionary_output_path: "/hpc/group/kamaleswaranlab/EmoryDataset/EMR_Supertables/"
 bed_unit_csv_fname:  "/cwork/jfr29/Sepy/AdditionalInformation/bed_units_to_icu_AH.csv"
 variable_bounds_csv_fname : "/cwork/jfr29/Sepy/AdditionalInformation/Variable_Chart.csv"
 dialysis_info_csn_fname: "/cwork/jfr29/Sepy/AdditionalInformation/PEACH_HD_CRRT.csv"
-unique_encounters_path: "/hpc/group/kamaleswaranlab/EmoryDataset/EMR_RAW/2014/CJSEPSIS_ENCOUNTER_2014.dsv"
+unique_encounters_path: 
+  2014: "/hpc/group/kamaleswaranlab/EmoryDataset/EMR_RAW/2014/CJSEPSIS_ENCOUNTER_2014.dsv"
+  2015: "/hpc/group/kamaleswaranlab/EmoryDataset/EMR_RAW/2015/CJSEPSIS_ENCOUNTER_2015.dsv"
+  2016: "/hpc/group/kamaleswaranlab/EmoryDataset/EMR_RAW/2016/CJSEPSIS_ENCOUNTER_2016.dsv"
+  2017: "/hpc/group/kamaleswaranlab/EmoryDataset/EMR_RAW/2017/CJSEPSIS_ENCOUNTER_2017.dsv"
+  2018: "/hpc/group/kamaleswaranlab/EmoryDataset/EMR_RAW/2018/CJSEPSIS_ENCOUNTER_2018.dsv"
+  2019: "/hpc/group/kamaleswaranlab/EmoryDataset/EMR_RAW/2019/CJSEPSIS_ENCOUNTER_2019.dsv"
+  2020: "/hpc/group/kamaleswaranlab/EmoryDataset/EMR_RAW/2020/CJSEPSIS_ENCOUNTER_2020.dsv"
+  2021: "/hpc/group/kamaleswaranlab/EmoryDataset/EMR_RAW/2021/CJSEPSIS_ENCOUNTER_2021.dsv"
+  2022: "/hpc/group/kamaleswaranlab/EmoryDataset/EMR_RAW/2022/CJSEPSIS_ENCOUNTER_2022.dsv"
 dataset_identifier: "em_y"
 years_to_scrape_data: ["2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022"]
 # CSN FILTERING
-encounter_type: "IN" # "0" = EM, "1" = Inpatient, "all" = all encounter types
+encounter_type: "IN" # "EM = Emergency", "IN" = Inpatient, "all" = all encounter types
 age: "adult" # "adult": age >= 18, "pediatric": age < 18, "all": all ages
-unique_enc_filter: "no" # "yes": only unique encounters, "no": all encounters
-unique_enc:
-  # - CSN1
+unique_enc_filter: "yes" # "yes": only unique encounters, "no": all encounters
+unique_enc: 
+  - "2f4a440b5d3a848e9bf4d0c879f9a53a0aa41fd120cc55da5bfd958ef90321f7"
+  - "b06d98232b0a62801c9db3f685003a84f850b747e99e2d3a347f2272303763aa"
+  - "a3d43407896d7364d3e564af5774c0e0c8845a8753bee700028e4da447106540"
+  - "e457192884c04c4a674b4fa582f0ed935d417db52922acfc7513c7630c25d394"
+  - "0bd9525be5a91937e11d5faa494adab366b3af77842ed101553fd79a23033f32"
+  - "e10c48b3210e562b25676f2381e6498e143513c35ba035842d46209dc35cf727"
   # - CSN2
   # - CSN3
 # DICTIONARY PATH KEWORDS

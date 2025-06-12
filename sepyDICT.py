@@ -4,9 +4,7 @@ Kamaleswaran Labs
 Author: Jack F. Regan
 Edited: 2025-03-06
 Version: 0.2
-Changes:
-  - improved documentation
-  - implemented yaml configuration file
+
 """
 import logging
 import warnings
@@ -254,21 +252,39 @@ class sepyDICT:
         """
         Resamples and aligns patient lab data to a unified hourly time index.
         """
+
         df = self.labs_PerCSN
+        
         if df.empty:
-            #drop the multi index and keep only collection time
-            df.index = df.index.get_level_values('collection_time')
-            #create new index with super table time index
-            self.labs_staging = pd.DataFrame(index = self.super_table_time_index, columns = df.columns)
+            # drop the multi index and keep only collection time
+            try:
+                df.index = df.index.get_level_values('collection_time')
+            except Exception as e:
+                logging.error("Failed to set index to 'collection_time': %s", e)
+            try:
+                self.labs_staging = pd.DataFrame(index=self.super_table_time_index, columns=df.columns)
+            except Exception as e:
+                logging.error("Failed to initialize labs_staging: %s", e)
+
         else:
             df = df.reset_index('collection_time')
-            new = pd.DataFrame([])
+            frames = []
             for key, value in self.labAGG.items():
-                col1 = df[[key, 'collection_time']].resample('60min', on = "collection_time",  origin = self.event_times ['start_index']).apply(value)
-                #col1 = col1.drop(columns=['collection_time'])
-                #logging.info(col1.columns)
-                new = pd.concat((new, col1), axis = 1)
-            self.labs_staging = new.reindex(self.super_table_time_index)
+                try:
+                    col1 = df[[key, 'collection_time']].resample(
+                        '60min',
+                        on="collection_time",
+                        origin=self.event_times['start_index']
+                    ).agg(value)
+                    frames.append(col1)
+                except Exception as e:
+                    logging.error("Error resampling %s: %s", key, e)
+            if frames:
+                new = pd.concat(frames, axis=1)
+                self.labs_staging = new.reindex(self.super_table_time_index)
+            else:
+                self.labs_staging = pd.DataFrame(index=self.super_table_time_index)
+
             #self.labs_staging.columns = [x[0] for x in self.labs_staging.columns]
     def bin_vitals(self):
         """
@@ -454,7 +470,7 @@ class sepyDICT:
                 else:
                     agg_fn = "max"
                 col1 = df[[key, 'med_order_time']].resample('60min', on = "med_order_time",  \
-                                                           origin = self.event_times ['start_index']).apply(agg_fn)
+                                                           origin = self.event_times['start_index']).apply(agg_fn)
                 #col1 = col1.drop(columns=['med_order_time'])
 
                 new = pd.concat((new, col1), axis = 1)
