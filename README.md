@@ -108,6 +108,6 @@ Set summary output directory and summary types:
 - `sepsis_summary`: Folder name to store outputs.
 - `sepsis_summary_types`: List of summary table types to generate.
 
-## Slurm JOb
+## Slurm Job
 
 Set years (list) to analyze and configuration file (yaml file path) to access
