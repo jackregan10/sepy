@@ -1,6 +1,6 @@
-# Sepy
+# sepy
 
-These scripts are used to generate super-tables from raw EMR data. 
+Scripts to generate super-tables from raw EMR data. 
 
 ##  Installation
 To install the necessary dependencies, run:
